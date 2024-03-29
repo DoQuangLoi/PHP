@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="form-sua-san-pham">
+        <div class="mb-3">
+            <label for="maSP" class="form-label">Mã sản phẩm:</label>
+            <input type="text" class="form-control" id="maSP" name="maSP">
+        </div>
+        <div class="mb-3">
+            <label for="tenSP" class="form-label">Tên sản phẩm:</label>
+            <input type="text" class="form-control" id="tenSP" name="tenSP">
+        </div>
+        <div class="mb-3">
+            <label for="giaSP" class="form-label">Giá sản phẩm:</label>
+            <input type="number" class="form-control" id="giaSP" name="giaSP">
+        </div>
+        <div class="mb-3">
+            <label for="soLuong" class="form-label">Số lượng:</label>
+            <input type="number" class="form-control" id="soLuong" name="soLuong">
+        </div>
+        <div class="mb-3">
+            <label for="maLoai" class="form-label">Mã loại:</label>
+            <select class="form-select" id="maLoai" name="FK_maLoai">
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const a = localStorage.getItem('maSP');
+        console.log(a);
+        axios.get(`api_get.php?maSP=${a}`,).then(response => {
+            const data = response.data;
+            for (const row of data) {
+                document.getElementById("maSP").value = row.maSP;
+                document.getElementById("tenSP").value = row.tenSP
+                document.getElementById("giaSP").value = row.giaSP
+                document.getElementById("soLuong").value = row.soLuong
+                document.getElementById("maLoai").value = row.FK_maLoai
+            }
+        })
+        axios.get("api_getML.php").then(response => {
+            const data = response.data;
+            const maLoaiSelect = document.getElementById("maLoai");
+            for (const row of data) {
+                const option = document.createElement("option");
+                option.value = row.maLoai;
+                option.textContent = row.tenLoai; // Assuming "tenLoai" holds the display text
+                maLoaiSelect.appendChild(option);
+            }
+            document.getElementById("form-sua-san-pham").addEventListener("submit", event => {
+                event.preventDefault();
+                var formData = new FormData(event.target);
+                for (const [key, value] of formData.entries()) {
+                    console.log(`Key: ${key}, Value: ${value}`);
+                }
+                axios.post('api_edit.php', formData).then(response => {
+                    const data = response.data.status;
+                    console.log(data);
+                    if (data === "success") {
+                        alert("sửa sản phẩm thành công")
+                             window.location.replace("homehome.html");
+                        // setTimeout(() => {
+                        //     window.location.replace("homehome.html");
+                        // }, 1000);
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container mt-3 table-responsive">
+        <a href="addSP.html" class="btn btn-primary">Add New Data</a>
+
+        <table class="table">
+            <tr color="#CCCCCC" style="font-weight:bold">
+
+                <td>MaSP</td>
+                <td>TênSP</td>
+                <td>Giá SP</td>
+                <td>Số lượng</td>
+                <td>Mã loại</td>
+                <td >Lựa chọn</td>
+            </tr>
+        </table>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            axios.get(`api_get.php`).then(response => {
+                const data = response.data;
+                console.log(data);
+                const a = "";
+                const table = document.querySelector("table");
+                const tbody = table.querySelector("tbody");
+                for (const row of data) {
+                    const tr = document.createElement("tr");
+                    const tdMaSP = document.createElement("td");
+                    const tdTenSP = document.createElement("td");
+                    const tdGiaSP = document.createElement("td");
+                    const tdSoLuong = document.createElement("td");
+                    const tdMaLoai = document.createElement("td");
+                    const tdOptions = document.createElement("td");
+                    tdMaSP.textContent = row.maSP;
+                    tdTenSP.textContent = row.tenSP;
+                    tdGiaSP.textContent = row.giaSP;
+                    tdSoLuong.textContent = row.soLuong;
+                    tdMaLoai.textContent = row.FK_maLoai;
+                    // // Edit button
+                    // const editBtn = document.createElement("button");
+                    // editBtn.classList.add("btn", "btn-sm", "btn-warning", "me-1"); // Bootstrap classes for styling
+                    // editBtn.textContent = "Edit";
+
+                    // // Add click event listener for edit button (implementation depends on your logic)
+                    // editBtn.addEventListener("click", () => {
+                    //     // Handle edit functionality here, potentially redirecting to an edit page with product ID
+                    //     console.log("Edit product with maSP:", row.maSP);
+                    //     localStorage.setItem('maSP', row.maSP);
+                    //     window.location.href = "editSP.html";
+                    // });
+
+                    // // Delete button
+                    // const deleteBtn = document.createElement("button");
+                    // deleteBtn.classList.add("btn", "btn-sm", "btn-danger"); // Bootstrap classes for styling
+                    // deleteBtn.textContent = "Delete";
+
+                    // // Add click event listener for delete button (implementation depends on your logic)
+                    // deleteBtn.addEventListener("click", () => {
+                    //     // Handle delete functionality here, potentially making an API call to delete the product
+                    //     console.log("Delete product with maSP:", row.maSP);
+                    // });
+                    tdOptions.appendChild(editBtn);
+                    tdOptions.appendChild(deleteBtn);
+                    tr.appendChild(tdMaSP);
+                    tr.appendChild(tdTenSP);
+                    tr.appendChild(tdGiaSP);
+                    tr.appendChild(tdSoLuong);
+                    tr.appendChild(tdMaLoai);
+                    tr.appendChild(tdOptions);
+                 
+
+                    tbody.appendChild(tr);
+
+                }
+
+
+            })
+
+        </script>
+
+
+    </div>
+</body>
+
+</html>
